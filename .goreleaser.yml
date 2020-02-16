@@ -1,0 +1,28 @@
+env:
+  - GO111MODULE=on
+
+builds:
+  - goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+
+brews:
+  -
+    github:
+      owner: bradleyjkemp
+      name: homebrew-formulae
+    homepage: "https://github.com/bradleyjkemp/abwhose"
+    description: "The simplest way to find how to report abusive domains."
+
+archives:
+  - replacements:
+      darwin: macOS
+      linux: Linux
+      windows: Windows
+    format: zip
+
+snapshot:
+  name_template: "{{ .Tag }}-next"
