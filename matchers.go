@@ -17,7 +17,7 @@ var matchers = map[string]matcher{
 }
 
 var emailMatchers = []*regexp.Regexp{
-	regexp.MustCompile(`(?i)(abuse@[a-zA-Z.]*)`),
+	regexp.MustCompile(`(?i)(abuse@[a-z0-9\-.]*)`),
 	regexp.MustCompile(`OrgAbuseEmail:\s+(.*)$`),
 }
 
