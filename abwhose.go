@@ -22,16 +22,32 @@ var tabWriter = tabwriter.NewWriter(os.Stdout, 12, 2, 1, ' ', tabwriter.TabInden
 func run(domain string) error {
 	// First look up abuse details for the domain itself (this will be the registrar)
 	tld, _ := publicsuffix.EffectiveTLDPlusOne(domain)
+
+	// First check if this is a shared host
+	contactDetails := map[string]string{}
+	var sharedHost bool
+	for name, matcher := range sharedHostMatchers {
+		if match, message := matcher(tld); match {
+			contactDetails[name] = message
+			sharedHost = true
+		}
+	}
+
+	// If this is a shared host then skip the WHOIS lookup
+	// as that information isn't useful.
+	if sharedHost {
+		fmt.Println("Report abuse to shared hosting provider:")
+		printContactDetails(contactDetails)
+		return nil
+	}
+
 	registrarAbuse, err := getAbuseReportDetails(tld)
 	if err != nil {
 		return fmt.Errorf("failed to get registrar abuse details: %w", err)
 	}
 
 	fmt.Println("Report abuse to domain registrar:")
-	for name, details := range registrarAbuse {
-		fmt.Fprintf(tabWriter, "  %s:\t%s\n", name, details)
-	}
-	tabWriter.Flush()
+	printContactDetails(registrarAbuse)
 
 	// Now look up the IP in order to find the hosting provider
 	ips, err := net.LookupIP(domain)
@@ -46,11 +62,15 @@ func run(domain string) error {
 	}
 
 	fmt.Println("Report abuse to host:")
-	for name, details := range hostAbuse {
+	printContactDetails(hostAbuse)
+	return nil
+}
+
+func printContactDetails(contactDetails map[string]string) {
+	for name, details := range contactDetails {
 		fmt.Fprintf(tabWriter, "  %s:\t%s\n", name, details)
 	}
 	tabWriter.Flush()
-	return nil
 }
 
 func getAbuseReportDetails(query string) (map[string]string, error) {
@@ -60,7 +80,7 @@ func getAbuseReportDetails(query string) (map[string]string, error) {
 	}
 
 	contactDetails := map[string]string{}
-	for name, matcher := range matchers {
+	for name, matcher := range whoisMatchers {
 		if match, message := matcher(string(rawWhois)); match {
 			contactDetails[name] = message
 		}

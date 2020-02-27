@@ -7,9 +7,17 @@ import (
 	"strings"
 )
 
-type matcher func(whois string) (match bool, message string)
+type matcher func(string) (match bool, message string)
 
-var matchers = map[string]matcher{
+var sharedHostMatchers = map[string]matcher{
+	"000webhost":    domainMatcher("000webhost.com", onlineFormMessage("https://www.000webhost.com/report-abuse")),
+	"000webhostapp": domainMatcher("000webhostapp.com", onlineFormMessage("https://www.000webhost.com/report-abuse")),
+	"Blogger":       domainMatcher("blogger.com", onlineFormMessage("https://support.google.com/blogger/answer/76315")),
+	"Blogspot":      domainMatcher("blogspot.com", onlineFormMessage("https://support.google.com/blogger/answer/76315")),
+	"Weebly":        domainMatcher("weebly.com", onlineFormMessage("https://www.weebly.com/uk/spam")),
+}
+
+var whoisMatchers = map[string]matcher{
 	"Cloudflare": containsMatcher("abuse@cloudflare.com", onlineFormMessage("https://www.cloudflare.com/abuse/form")),
 	"GoDaddy":    containsMatcher("abuse@godaddy.com", onlineFormMessage("https://supportcenter.godaddy.com/AbuseReport")),
 	"Namecheap":  containsMatcher("abuse@namecheap.com", onlineFormMessage("https://support.namecheap.com/index.php?/Tickets/Submit")),
@@ -46,6 +54,16 @@ func fallbackEmailMatcher(whois string) (bool, string) {
 func containsMatcher(contents, message string) matcher {
 	return func(whois string) (bool, string) {
 		if strings.Contains(whois, contents) {
+			return true, message
+		}
+
+		return false, ""
+	}
+}
+
+func domainMatcher(domain, message string) matcher {
+	return func(abusiveDomain string) (bool, string) {
+		if abusiveDomain == domain || strings.HasSuffix(abusiveDomain, "."+domain) {
 			return true, message
 		}
 
