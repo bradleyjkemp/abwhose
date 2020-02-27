@@ -1,6 +1,6 @@
 # abwhose [![GitHub release](https://img.shields.io/github/release/bradleyjkemp/abwhose.svg)](https://github.com/bradleyjkemp/abwhose/releases/latest)
 
-The simplest way to find the *correct* place report a domain for abuse.
+The simplest way to find the *correct* place to report a domain for abuse.
 
 ```bash
 $ abwhose phishing-mcphishface.com
