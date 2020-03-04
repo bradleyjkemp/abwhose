@@ -26,14 +26,14 @@ var whoisMatchers = map[string]matcher{
 
 var emailMatchers = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)(abuse@[a-z0-9\-.]*)`),
-	regexp.MustCompile(`OrgAbuseEmail:\s+(.*)$`),
+	regexp.MustCompile(`(?m)^OrgAbuseEmail:\s+(.*)$`),
 }
 
 func fallbackEmailMatcher(whois string) (bool, string) {
 	var emails = map[string]struct{}{}
 	for _, matcher := range emailMatchers {
 		for _, email := range matcher.FindAllStringSubmatch(whois, -1) {
-			emails[email[0]] = struct{}{}
+			emails[email[1]] = struct{}{}
 		}
 	}
 
