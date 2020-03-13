@@ -18,15 +18,17 @@ var sharedHostMatchers = map[string]matcher{
 }
 
 var whoisMatchers = map[string]matcher{
-	"Cloudflare": containsMatcher("abuse@cloudflare.com", onlineFormMessage("https://www.cloudflare.com/abuse/form")),
-	"GoDaddy":    containsMatcher("abuse@godaddy.com", onlineFormMessage("https://supportcenter.godaddy.com/AbuseReport")),
-	"Namecheap":  containsMatcher("abuse@namecheap.com", onlineFormMessage("https://support.namecheap.com/index.php?/Tickets/Submit")),
-	"Namesilo":   containsMatcher("abuse@namesilo.com", onlineFormMessage("https://www.namesilo.com/report_abuse.php or https://new.namesilo.com/phishing_report.php")),
+	"Cloudflare":           containsMatcher("abuse@cloudflare.com", onlineFormMessage("https://www.cloudflare.com/abuse/form")),
+	"GoDaddy":              containsMatcher("abuse@godaddy.com", onlineFormMessage("https://supportcenter.godaddy.com/AbuseReport")),
+	"Namecheap":            containsMatcher("abuse@namecheap.com", onlineFormMessage("https://support.namecheap.com/index.php?/Tickets/Submit")),
+	"Namesilo":             containsMatcher("abuse@namesilo.com", onlineFormMessage("https://www.namesilo.com/report_abuse.php or https://new.namesilo.com/phishing_report.php")),
+	"PublicDomainRegistry": containsMatcher("abuse-contact@publicdomainregistry.com", onlineFormMessage("http://publicdomainregistry.com/report-abuse-complain/")),
 }
 
 var emailMatchers = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)(abuse@[a-z0-9\-.]*)`),
 	regexp.MustCompile(`(?m)^OrgAbuseEmail:\s+(.*)$`),
+	regexp.MustCompile(`(?m)^Registrar Abuse Contact Email:\s+(.*)$`),
 }
 
 func fallbackEmailMatcher(whois string) (bool, string) {
