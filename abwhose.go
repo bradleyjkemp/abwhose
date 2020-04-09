@@ -24,80 +24,68 @@ func run(domain string) error {
 	tld, _ := publicsuffix.EffectiveTLDPlusOne(domain)
 
 	// First check if this is a shared host
-	contactDetails := map[string]string{}
 	var sharedHost bool
-	for name, matcher := range sharedHostMatchers {
-		if match, message := matcher(tld); match {
-			contactDetails[name] = message
+	for _, matcher := range sharedHostMatchers {
+		if match, display := matcher(tld); match {
+			if !sharedHost {
+				fmt.Println("Report abuse to shared hosting provider:")
+			}
+			display()
 			sharedHost = true
 		}
 	}
-
 	// If this is a shared host then skip the WHOIS lookup
 	// as that information isn't useful.
 	if sharedHost {
-		fmt.Println("Report abuse to shared hosting provider:")
-		printContactDetails(contactDetails)
 		return nil
 	}
 
-	registrarAbuse, err := getAbuseReportDetails(tld)
+	err := getAbuseReportDetails("Report abuse to domain registrar:", domain, tld)
 	if err != nil {
 		return fmt.Errorf("failed to get registrar abuse details: %w", err)
 	}
 
-	fmt.Println("Report abuse to domain registrar:")
-	printContactDetails(registrarAbuse)
-
 	// Now look up the IP in order to find the hosting provider
 	ips, err := net.LookupIP(domain)
 	if err != nil {
-		return fmt.Errorf("failed to resolve host: %w", err)
+		return fmt.Errorf("failed to find hosting provider: %w", err)
 	}
 
 	// Abuse details for the IP should be the hosting provider
-	hostAbuse, err := getAbuseReportDetails(ips[0].String())
+	err = getAbuseReportDetails("Report abuse to host:", domain, ips[0].String())
 	if err != nil {
 		return fmt.Errorf("failed to get host abuse details: %w", err)
 	}
-
-	fmt.Println("Report abuse to host:")
-	printContactDetails(hostAbuse)
 	return nil
 }
 
-func printContactDetails(contactDetails map[string]string) {
-	for name, details := range contactDetails {
-		fmt.Fprintf(tabWriter, "  %s:\t%s\n", name, details)
-	}
-	tabWriter.Flush()
-}
-
-func getAbuseReportDetails(query string) (map[string]string, error) {
+func getAbuseReportDetails(header, domain, query string) error {
 	rawWhois, err := exec.Command("whois", query).CombinedOutput()
 	if err != nil {
-		return nil, err
+		return err
 	}
 
-	contactDetails := map[string]string{}
-	for name, matcher := range whoisMatchers {
-		if match, message := matcher(string(rawWhois)); match {
-			contactDetails[name] = message
+	gotMatch := false
+	for _, matcher := range whoisMatchers {
+		if match, display := matcher(string(rawWhois)); match {
+			if !gotMatch {
+				fmt.Println(header)
+				gotMatch = true
+			}
+			display()
 		}
 	}
 
 	// None of the specific matchers hit so use a generic one
-	if len(contactDetails) == 0 {
-		found, emails := fallbackEmailMatcher(string(rawWhois))
+	if !gotMatch {
+		found, display := fallbackEmailMatcher(header, domain, string(rawWhois))
 		if found {
-			contactDetails["Email"] = emails
+			display()
+			return nil
 		}
 	}
 
-	// Still found nothing so just set an error message
-	if len(contactDetails) == 0 {
-		contactDetails["Error"] = "Couldn't find any contact details."
-	}
-
-	return contactDetails, nil
+	fmt.Println(header)
+	fmt.Println("  couldn't find any abuse contact details")
+	return nil
 }
