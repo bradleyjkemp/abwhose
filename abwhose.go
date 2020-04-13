@@ -75,14 +75,15 @@ func getAbuseReportDetails(header, domain, query string) error {
 			display()
 		}
 	}
+	if gotMatch {
+		return nil
+	}
 
 	// None of the specific matchers hit so use a generic one
-	if !gotMatch {
-		found, display := fallbackEmailMatcher(header, domain, string(rawWhois))
-		if found {
-			display()
-			return nil
-		}
+	found, display := fallbackEmailMatcher(header, domain, string(rawWhois))
+	if found {
+		display()
+		return nil
 	}
 
 	fmt.Println(header)
