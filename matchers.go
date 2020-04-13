@@ -20,6 +20,7 @@ var sharedHostMatchers = []matcher{
 	domainMatcher("blogger.com", onlineFormMessage("Blogger", "https://support.google.com/blogger/answer/76315")),
 	domainMatcher("blogspot.com", onlineFormMessage("Blogger", "https://support.google.com/blogger/answer/76315")),
 	domainMatcher("weebly.com", onlineFormMessage("Weebly", "https://www.weebly.com/uk/spam")),
+	domainMatcher("appspot.com", onlineFormMessage("Google Cloud", "https://support.google.com/code/contact/cloud_platform_report")),
 }
 
 var whoisMatchers = []matcher{
@@ -28,6 +29,8 @@ var whoisMatchers = []matcher{
 	containsMatcher("abuse@namecheap.com", onlineFormMessage("Namecheap", "https://support.namecheap.com/index.php?/Tickets/Submit")),
 	containsMatcher("abuse@namesilo.com", onlineFormMessage("Namesilo", "https://www.namesilo.com/report_abuse.php or https://new.namesilo.com/phishing_report.php")),
 	containsMatcher("abuse-contact@publicdomainregistry.com", onlineFormMessage("PublicDomainRegistry", "http://publicdomainregistry.com/report-abuse-complain/")),
+	containsMatcher("abuse@tucows.com", onlineFormMessage("Tucows", "https://tucowsdomains.com/report-abuse/")),
+	containsMatcher("domainabuse@tucows.com", onlineFormMessage("Tucows", "https://tucowsdomains.com/report-abuse/")),
 }
 
 var emailMatchers = []*regexp.Regexp{
