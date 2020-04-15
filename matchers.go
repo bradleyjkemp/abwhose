@@ -36,14 +36,14 @@ var whoisMatchers = []matcher{
 var emailMatchers = []*regexp.Regexp{
 	regexp.MustCompile(`(?i)(abuse@[a-z0-9\-.]*)`),
 	regexp.MustCompile(`(?m)^OrgAbuseEmail:\s+(.*)$`),
-	regexp.MustCompile(`(?m)^Registrar Abuse Contact Email:\s+(.*)$`),
+	regexp.MustCompile(`(?m)^Registrar Abuse Contact Email:\s+(.+)$`),
 }
 
 func fallbackEmailMatcher(header, domain, whois string) (bool, func()) {
 	var emails = map[string]struct{}{}
 	for _, matcher := range emailMatchers {
 		for _, email := range matcher.FindAllStringSubmatch(whois, -1) {
-			emails[email[1]] = struct{}{}
+			emails[strings.TrimSpace(email[1])] = struct{}{}
 		}
 	}
 	if len(emails) == 0 {
@@ -98,12 +98,9 @@ func userSaysYes() bool {
 	okayResponses := map[string]bool{
 		"":    true,
 		"y":   true,
-		"Y":   true,
 		"yes": true,
-		"Yes": true,
-		"YES": true,
 	}
-	if okayResponses[response] {
+	if okayResponses[strings.ToLower(response)] {
 		return true
 	}
 	return false
