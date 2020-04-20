@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"fmt"
 	"io/ioutil"
+	"net/url"
 	"os"
 	"os/exec"
 	"regexp"
@@ -39,7 +40,7 @@ var emailMatchers = []*regexp.Regexp{
 	regexp.MustCompile(`(?m)^Registrar Abuse Contact Email:\s+(.+)$`),
 }
 
-func fallbackEmailMatcher(header, domain, whois string) (bool, func()) {
+func fallbackEmailMatcher(header string, abusive *url.URL, whois string) (bool, func()) {
 	var emails = map[string]struct{}{}
 	for _, matcher := range emailMatchers {
 		for _, email := range matcher.FindAllStringSubmatch(whois, -1) {
@@ -74,7 +75,8 @@ func fallbackEmailMatcher(header, domain, whois string) (bool, func()) {
 		}
 		mailto := &bytes.Buffer{}
 		err = template.Must(template.New("email").Parse(string(emailTemplateContents))).Execute(mailto, map[string]interface{}{
-			"domain":    strings.Replace(domain, ".", "[.]", -1),
+			"domain":    strings.Replace(abusive.Hostname(), ".", "[.]", -1),
+			"url":       strings.Replace(abusive.Hostname(), ".", "[.]", -1) + abusive.RawPath + abusive.RawQuery,
 			"recipient": strings.Join(sortedEmails, ";"),
 		})
 		if err != nil {
