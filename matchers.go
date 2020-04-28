@@ -22,6 +22,7 @@ var sharedHostMatchers = []matcher{
 	domainMatcher("blogspot.com", onlineFormMessage("Blogger", "https://support.google.com/blogger/answer/76315")),
 	domainMatcher("weebly.com", onlineFormMessage("Weebly", "https://www.weebly.com/uk/spam")),
 	domainMatcher("appspot.com", onlineFormMessage("Google Cloud", "https://support.google.com/code/contact/cloud_platform_report")),
+	domainMatcher("googleapis.com", onlineFormMessage("Google Cloud", "https://support.google.com/code/contact/cloud_platform_report")),
 }
 
 var whoisMatchers = []matcher{
