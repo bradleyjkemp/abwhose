@@ -11,6 +11,7 @@ import (
 // Try to keep this sorted alphabetically by providerID
 var whoisMatchers = []matcher{
 	{OnlineForm{"Cloudflare", "https://www.cloudflare.com/abuse/form"}, whoisContains("abuse@cloudflare.com")},
+	{OnlineForm{"Dynadot", "https://www.dynadot.com/report_abuse.html"}, whoisContains("abuse@dynadot.com")},
 	{OnlineForm{"GoDaddy", "https://supportcenter.godaddy.com/AbuseReport"}, whoisContains("abuse@godaddy.com")},
 	{OnlineForm{"Namecheap", "https://support.namecheap.com/index.php?/Tickets/Submit"}, whoisContains("abuse@namecheap.com")},
 	{OnlineForm{"Namesilo", "https://www.namesilo.com/report_abuse.php or https://new.namesilo.com/phishing_report.php"}, whoisContains("abuse@namesilo.com")},
