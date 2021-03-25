@@ -20,7 +20,7 @@ func IsSharedHostingProvider(u *url.URL) (bool, ProviderContact) {
 // Matches content served by shared hosting providers i.e. where the abusive content
 // is not served by the domain/server owner.
 //
-// Try to keep this sorted alphabetically by providerID
+// Try to keep this sorted alphabetically by ProviderName
 var sharedHostMatchers = []matcher{
 	{OnlineForm{"000webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhost.com")},
 	{OnlineForm{"00webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhostapp.com")},

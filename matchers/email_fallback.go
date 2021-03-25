@@ -25,7 +25,7 @@ func getRawEmailContacts(rawWhois string) []ProviderContact {
 
 	sortedEmails := make([]ProviderContact, 0, len(emails))
 	for email := range emails {
-		sortedEmails = append(sortedEmails, AbuseEmail{providerID(email), email})
+		sortedEmails = append(sortedEmails, AbuseEmail{ProviderName(email), email})
 	}
 	sort.Slice(sortedEmails, func(i, j int) bool {
 		return sortedEmails[i].(AbuseEmail).Email < sortedEmails[j].(AbuseEmail).Email

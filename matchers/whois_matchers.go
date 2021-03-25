@@ -8,7 +8,7 @@ import (
 
 // Matches WHOIS data to the best way to report abuse to the registrar/hosting provider.
 //
-// Try to keep this sorted alphabetically by providerID
+// Try to keep this sorted alphabetically by ProviderName
 var whoisMatchers = []matcher{
 	{OnlineForm{"Cloudflare", "https://www.cloudflare.com/abuse/form"}, whoisContains("abuse@cloudflare.com")},
 	{OnlineForm{"Dynadot", "https://www.dynadot.com/report_abuse.html"}, whoisContains("abuse@dynadot.com")},

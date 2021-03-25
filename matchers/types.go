@@ -5,18 +5,18 @@ type ProviderContact interface {
 }
 
 type OnlineForm struct {
-	providerID
+	ProviderName
 	URL string
 }
 
 type AbuseEmail struct {
-	providerID
+	ProviderName
 	Email string
 }
 
-type providerID string
+type ProviderName string
 
-func (m providerID) Name() string {
+func (m ProviderName) Name() string {
 	return string(m)
 }
 
