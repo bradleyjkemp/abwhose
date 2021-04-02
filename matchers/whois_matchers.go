@@ -2,7 +2,6 @@ package matchers
 
 import (
 	"fmt"
-	"os/exec"
 	"strings"
 )
 
@@ -29,7 +28,7 @@ func whoisContains(contents string) func(string) bool {
 }
 
 func getContactsFromWHOIS(query string) ([]ProviderContact, error) {
-	rawWhois, err := exec.Command("whois", query).CombinedOutput()
+	rawWhois, err := WHOISClient(query)
 	if err != nil {
 		return nil, fmt.Errorf("failed to query whois: %s, %w", string(rawWhois), err)
 	}
