@@ -29,6 +29,7 @@ var sharedHostMatchers = []matcher{
 	{OnlineForm{"Google Cloud", "https://support.google.com/code/contact/cloud_platform_report"}, isSubDomainOf("appspot.com")},
 	{OnlineForm{"Google Cloud", "https://support.google.com/code/contact/cloud_platform_report"}, isSubDomainOf("googleapis.com")},
 	{OnlineForm{"Weebly", "https://www.weebly.com/uk/spam"}, isSubDomainOf("weebly.com")},
+	{OnlineForm{"Yola", "https://helpcenter.yola.com/hc/en-us/requests/new?ticket_form_id=360001504300"}, isSubDomainOf("yolasite.com")},
 }
 
 func isSubDomainOf(domain string) func(string) bool {
