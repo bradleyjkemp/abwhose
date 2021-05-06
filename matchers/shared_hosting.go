@@ -23,7 +23,8 @@ func IsSharedHostingProvider(u *url.URL) (bool, ProviderContact) {
 // Try to keep this sorted alphabetically by ProviderName
 var sharedHostMatchers = []matcher{
 	{OnlineForm{"000webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhost.com")},
-	{OnlineForm{"00webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhostapp.com")},
+	{OnlineForm{"000webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhostapp.com")},
+	{OnlineForm{"Bitly", "https://bitly.is/reporting-abuse"}, isSubDomainOf("bit.ly")},
 	{OnlineForm{"Blogger", "https://support.google.com/blogger/answer/76315"}, isSubDomainOf("blogger.com")},
 	{OnlineForm{"Blogger", "https://support.google.com/blogger/answer/76315"}, isSubDomainOf("blogspot.com")},
 	{OnlineForm{"Google Cloud", "https://support.google.com/code/contact/cloud_platform_report"}, isSubDomainOf("appspot.com")},
