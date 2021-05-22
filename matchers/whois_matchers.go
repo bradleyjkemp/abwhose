@@ -18,13 +18,17 @@ var whoisMatchers = []matcher{
 	{OnlineForm{"Namesilo", "https://www.namesilo.com/report_abuse.php or https://new.namesilo.com/phishing_report.php"}, whoisContains("abuse@namesilo.com")},
 	{AbuseEmail{"OrangeWebsite", "abuse-dept@orangewebsite.com"}, whoisContains("abuse@orangewebsite.com")},
 	{OnlineForm{"PublicDomainRegistry", "https://publicdomainregistry.com/process-for-handling-abuse/"}, whoisContains("abuse-contact@publicdomainregistry.com")},
-	{OnlineForm{"Tucows", "https://tucowsdomains.com/report-abuse/"}, whoisContains("abuse@tucows.com")},
-	{OnlineForm{"Tucows", "https://tucowsdomains.com/report-abuse/"}, whoisContains("domainabuse@tucows.com")},
+	{OnlineForm{"Tucows", "https://tucowsdomains.com/report-abuse/"}, whoisContains("abuse@tucows.com", "domainabuse@tucows.com")},
 }
 
-func whoisContains(contents string) func(string) bool {
+func whoisContains(needles ...string) func(string) bool {
 	return func(whois string) bool {
-		return strings.Contains(whois, contents)
+		for _, needle := range needles {
+			if strings.Contains(whois, needle) {
+				return true
+			}
+		}
+		return false
 	}
 }
 
