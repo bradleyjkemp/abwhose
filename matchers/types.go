@@ -40,7 +40,7 @@ func (m ProviderName) Name() string {
 	return string(m)
 }
 
-type matcher struct {
-	contact ProviderContact
-	matches func(string) bool
+type Matcher struct {
+	Contact ProviderContact
+	Matches func(string) bool
 }

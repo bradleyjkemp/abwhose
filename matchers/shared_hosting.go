@@ -9,9 +9,9 @@ import (
 // If this matches, these contact details should be preferred over the
 // registrar and hosting provider.
 func IsSharedHostingProvider(u *url.URL) (bool, ProviderContact) {
-	for _, m := range sharedHostMatchers {
-		if m.matches(u.Host) {
-			return true, m.contact
+	for _, m := range SharedHosts {
+		if m.Matches(u.Host) {
+			return true, m.Contact
 		}
 	}
 	return false, nil
@@ -21,7 +21,7 @@ func IsSharedHostingProvider(u *url.URL) (bool, ProviderContact) {
 // is not served by the domain/server owner.
 //
 // Try to keep this sorted alphabetically by ProviderName
-var sharedHostMatchers = []matcher{
+var SharedHosts = []Matcher{
 	{OnlineForm{"000webhost", "https://www.000webhost.com/report-abuse"}, isSubDomainOf("000webhost.com", "000webhostapp.com")},
 	{AbuseEmail{"Adobe", "hellospark@adobe.com"}, isSubDomainOf("spark.adobe.com")},
 	{OnlineForm{"Bitly", "https://bitly.is/reporting-abuse"}, isSubDomainOf("bit.ly")},

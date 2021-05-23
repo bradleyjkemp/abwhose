@@ -8,7 +8,7 @@ import (
 // Matches WHOIS data to the best way to report abuse to the registrar/hosting provider.
 //
 // Try to keep this sorted alphabetically by ProviderName
-var whoisMatchers = []matcher{
+var WHOIS = []Matcher{
 	{OnlineForm{"Cloudflare", "https://www.cloudflare.com/abuse/form"}, whoisContains("abuse@cloudflare.com")},
 	{OnlineForm{"Digital Ocean", "https://www.digitalocean.com/company/contact/#abuse"}, whoisContains("descr:          Digital Ocean, Inc.")},
 	{OnlineForm{"Dynadot", "https://www.dynadot.com/report_abuse.html"}, whoisContains("abuse@dynadot.com")},
@@ -39,13 +39,13 @@ func getContactsFromWHOIS(query string) ([]ProviderContact, error) {
 	}
 
 	var contacts []ProviderContact
-	for _, m := range whoisMatchers {
-		if m.matches(string(rawWhois)) {
-			contacts = append(contacts, m.contact)
+	for _, m := range WHOIS {
+		if m.Matches(string(rawWhois)) {
+			contacts = append(contacts, m.Contact)
 		}
 	}
 
-	// One of the whoisMatchers matched so return that info
+	// One of the WHOIS matched so return that info
 	if len(contacts) > 0 {
 		return contacts, nil
 	}
