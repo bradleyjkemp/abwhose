@@ -36,6 +36,7 @@ var SharedHosts = []Matcher{
 	{OnlineForm{"Jimdo", "https://jimdo-legal.zendesk.com/hc/en-us/requests/new?ticket_form_id=239123"}, isSubDomainOf("jimdosite.com")},
 	{OnlineForm{"Microsoft", "https://msrc.microsoft.com/report/abuse"}, isSubDomainOf("blob.core.windows.net")},
 	{AbuseEmail{"Replit", "contact@repl.it"}, isSubDomainOf("repl.co")},
+	{AbuseEmail{"Netlify", "fraud@netlify.com"}, isSubDomainOf("netlify.app")},
 	{OnlineForm{"Notion", "https://www.notion.so/Report-inappropriate-content-9feb9f2f9d8c40b1b7d289b155907de0"}, isSubDomainOf("notion.so", "notion.com")},
 	{AbuseEmail{"Square", "spoof@squareup.com"}, isSubDomainOf("square.site")},
 	{OnlineForm{"Weebly", "https://www.weebly.com/uk/spam"}, isSubDomainOf("weebly.com")},
