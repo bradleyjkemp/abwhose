@@ -41,6 +41,7 @@ var SharedHosts = []Matcher{
 	{AbuseEmail{"Square", "spoof@squareup.com"}, isSubDomainOf("square.site")},
 	{OnlineForm{"Weebly", "https://www.weebly.com/uk/spam"}, isSubDomainOf("weebly.com")},
 	{OnlineForm{"Yola", "https://helpcenter.yola.com/hc/en-us/requests/new?ticket_form_id=360001504300"}, isSubDomainOf("yolasite.com")},
+	{OnlineForm{"Fleek", "https://form.typeform.com/to/BzFH0anw?typeform-source=fleek.co"}, isSubDomainOf("fleek.co")},
 }
 
 func isSubDomainOf(domains ...string) func(string) bool {
